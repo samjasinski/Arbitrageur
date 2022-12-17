@@ -1,0 +1,35 @@
+<%- include('partials/header.ejs') %>
+
+<h1>Scraper Library</h1>
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Platform</th>
+      <th scope="col">Target</th>
+      <th scope="col">URL</th>
+      <th scope="col">Outcomes Xpath</th>
+      <th scope="col">Odds Xpath</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% userScrapersArray.forEach(scraper => { %>
+    <tr>
+      <form action="/buildScraper/delete" method="post">
+      <th scope="row"><%=scraper['targetPlatform']%></th>
+      <td><%=scraper['targetSport']%></td>
+      <td><%=scraper['targetUrl']%></td>
+      <td><%=scraper['outcomesXpath']%></td>
+      <td><%=scraper['oddsXpath']%></td>
+      <td><button class="bi bi-trash" type="submit" name="scraperId" value="<%=scraper['_id']%>"></button></td>
+      </form>
+    </tr>
+    <%})%>
+  </tbody>
+</table>
+
+
+</div>
+
+<%- include('partials/footer.ejs') %>

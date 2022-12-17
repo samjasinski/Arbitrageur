@@ -1,0 +1,48 @@
+<%- include('partials/header.ejs') %>
+
+<h1>Okay, let's build a scraper!</h1>
+
+<form action="/buildScraper" method="post">
+  <div class="form-group col-md-4 col-sm-12">
+    <label for="inputUrl">Platform</label>
+    <input required type="text" class="form-control" id="platform" name="platform" placeholder='e.g. "SportsBet"'>
+  </div>
+
+  <div class="form-group col-md-4 col-sm-12">
+    <label for="inputUrl">Target</label>
+    <input required type="text" class="form-control" id="target" name="target" placeholder='e.g. "Soccer"'>
+  </div>
+
+  <div class="form-group col-md-4 col-sm-12">
+    <label for="inputUrl">URL</label>
+    <input required type="url" class="form-control" id="url" name="url" placeholder='e.g. "https://www.sportsbet.com.au/betting/soccer/2022-world-cup/world-cup-2022"'>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-4 col-sm-12">
+      <label for="inputOutcomes">Outcomes XPath</label>
+      <input required type="text" class="form-control" id="outcomesXpath" name="outcomesXpath" placeholder='e.g. span[class="size12_fq5j3k2"]'>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-4 col-sm-12">
+      <label for="inputOutcomes">Odds XPath</label>
+      <input required type="text" class="form-control" id="oddsXpath" name="oddsXpath" placeholder='e.g. span[class="size12_fq5j3k2"]'>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-4 col-sm-12">
+      <label for="inputOutcomes">Group By</label>
+      <input required type="number" class="form-control" id="groupBy" name="groupBy" placeholder='e.g. 3 (outcome 1: odds1, draw: odds2, outcome 2: odds3)'>
+    </div>
+  </div>
+
+
+  <button type="submit" class="btn btn-primary">Let's Scrape!</button>
+</form>
+
+</div>
+
+<%- include('partials/footer.ejs') %>

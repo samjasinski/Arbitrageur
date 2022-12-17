@@ -1,0 +1,23 @@
+{
+  "name": "arbitrageur",
+  "version": "1.0.0",
+  "description": "A web application designed to scrap Australian sports betting sites for arbitrage oppertunities",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sam Jasinski",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.1",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "mongoose": "^6.7.5",
+    "nodemon": "^2.0.20",
+    "puppeteer": "^19.3.0",
+    "socket.io": "^4.5.4"
+  }
+}
