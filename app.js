@@ -38,6 +38,10 @@ const dbname = process.env.dbName
 const mongoose = require("mongoose");
 mongoose.connect("mongodb://localhost:27017/ArbitrageurDB");
 
+// SOCKET.IO
+const { Server } = require("socket.io");
+const io = new Server(app)
+
 // CONTROLLERS
 const loginController = require('./controllers/login')
 const registerController = require('./controllers/register')
