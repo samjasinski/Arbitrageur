@@ -5,6 +5,8 @@ const Scraper = mongoose.model("Scraper", scraperSchema);
 const userSchema = require('../models/user');
 const User = mongoose.model("User", userSchema);
 
+watchScraperStream();
+
 function validateLogin(user, res) {
   if (user == null) {
     loginController.loginPlaceholderData.errorUserDoesNotExist = "You are not logged in. Please fill in your details and try again."
@@ -35,8 +37,6 @@ async function createScraper(platform, target, url, outcomesXpath, oddsXpath, gr
       foundUser.scrapers.push(newScraper)
       await foundUser.save()
 
-      console.log(foundUser)
-
     } else {
       console.log(err)
       res.render("login")
@@ -44,14 +44,11 @@ async function createScraper(platform, target, url, outcomesXpath, oddsXpath, gr
   });
 }
 
-
-
 async function deleteScraper(scraperId) {
   scraper = scraperId;
 
   try {
     await Scraper.deleteOne({_id: scraper})
-    console.log("DELETED from scrapers db")
   } catch (error) {
     console.log("ERROR: Failed to delete scraper", error)
   }
@@ -74,9 +71,23 @@ async function deleteUserScraper(userId, scraperId) {
   }
 }
 
+function watchScraperStream() {
+  Scraper.watch().on('change', next => {
+           // process any change event
+           switch (next.operationType) {
+               case 'insert':
+                   console.log(next.fullDocument.message);
+                   break;
+               case 'update':
+                   console.log(next.updateDescription.updatedFields.message);
+           }
+})
+}
+
 module.exports = {
   validateLogin,
   createScraper,
   deleteScraper,
-  deleteUserScraper
+  deleteUserScraper,
+  watchScraperStream
 }

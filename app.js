@@ -15,11 +15,11 @@ app.use(express.json()); // related to mongoose
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-app.use(session({
-  secret: process.env.SECRET,
-  resave: false,
-  saveUninitialized: true
-}));
+// app.use(session({
+//   secret: process.env.SECRET,
+//   resave: false,
+//   saveUninitialized: true
+// }));
 
 // EJS
 const ejs = require('ejs')
@@ -36,11 +36,26 @@ const dbname = process.env.dbName
 
 // MONGOOSE
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/ArbitrageurDB");
+mongoose.connect(process.env.MONGODB_CONNECTION_STRING);
 
 // SOCKET.IO
+const http = require('http');
 const { Server } = require("socket.io");
-const io = new Server(app)
+const server = http.createServer(app);
+const io = new Server(server);
+
+const sessionMiddleware = session({
+  secret: process.env.SECRET,
+    resave: false,
+      saveUninitialized: true
+});
+
+app.use(sessionMiddleware);
+
+const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
+
+io.use(wrap(sessionMiddleware));
+
 
 // CONTROLLERS
 const loginController = require('./controllers/login')
@@ -115,16 +130,27 @@ app.post('/buildScraper', async (req, res) => {
 })
 
 app.post('/buildScraper/delete', async (req, res) => {
+  buildScraperController.watchScraperStream()
+
   scraper = req.body['scraperId']
   await buildScraperController.deleteScraper(scraper)
 
   user = req.session.user['_id']
   await buildScraperController.deleteUserScraper(user, scraper)
 
-  // need to reload user session?
+
 
   // go back to Library
 })
 
+// SOCKET.IO
+io.on('connection', function(socket) {
+   console.log('A user connected');
+
+   socket.on('disconnect', function () {
+      console.log('A user disconnected');
+   });
+});
+
 // LISTEN
-app.listen(PORT, console.log("SERVER STARTED ON PORT [ " + PORT + " ]\n APPLICATION RUNNING AT: http://localhost:3000/"))
+server.listen(PORT, console.log("SERVER STARTED ON PORT [ " + PORT + " ]\n APPLICATION RUNNING AT: http://localhost:3000/"))
